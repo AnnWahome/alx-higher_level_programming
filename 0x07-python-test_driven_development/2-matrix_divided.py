@@ -1,30 +1,40 @@
 #!/usr/bin/python3
 """
-    Contain function that handles matrix division
+    2-matrix_divided Module
 """
 
 
 def matrix_divided(matrix, div):
-    """Divides all elements of a matrix"""
+    """
+        Divides all elements of a matrix
+        Args:
+            matrix: intial 2D list
+            div: integer which is the divisor
+        Returns:
+            New matrix containing the divided elements
+            rounded to 2 decimal places
+    """
+    prev_len = 0
+    error_mess = "matrix must be a matrix (list of lists) of integers/floats"
+    if type(matrix) is not list:
+        raise TypeError(error_mess)
 
-    if not isinstance(matrix, list):
-        raise TypeError(
-            "matrix must be a matrix (list of lists) of integers/floats")
-    if not all(isinstance(v, list) for v in matrix):
-        raise TypeError(
-            "matrix must be a matrix (list of lists) of integers/floats")
-    if not all(isinstance(v, (int, float)) for row in matrix for v in row):
-        raise TypeError(
-            "matrix must be a matrix (list of lists) of integers/floats")
+    for block in matrix:    # matrix is a list
+        if type(block) is not list:
+            raise TypeError(error_mess)
 
-    for index, row in enumerate(matrix):
-        if len(row) != len(matrix[index - 1]):
+        for element in block:
+            if type(element) is not int and type(element) is not float:
+                raise TypeError(error_mess)
+
+        if len(block) != prev_len and prev_len != 0:
             raise TypeError("Each row of the matrix must have the same size")
+        prev_len = len(block)
 
-    if not isinstance(div, (int, float)):
+    if type(div) is not int and type(div) is not float:
         raise TypeError("div must be a number")
+
     if div == 0:
         raise ZeroDivisionError("division by zero")
 
-    return list(map(lambda row: list(map(lambda v:
-                                         round(v/div, 2), row)), matrix))
+    return [[round(elem / div, 2) for elem in row] for row in matrix]
